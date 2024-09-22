@@ -16,31 +16,30 @@ func main() {
 
 func Homehandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
-		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		http.Error(w, "Method Not Allowed 405", http.StatusMethodNotAllowed)
 		return
 	}
 
 	if r.URL.Path != "/" {
-		http.Error(w, "Not Found", http.StatusNotFound)
+		http.Error(w, "Not Found 404", http.StatusNotFound)
 		return
 	}
 
 	err := FetchData("")
 	if err != nil {
-		fmt.Println("hh")
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Internal Server Error 500", http.StatusInternalServerError)
 		return
 	}
 
 	file, err := template.ParseFiles("index.html")
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Internal Server Error 500", http.StatusInternalServerError)
 		return
 	}
 
 	err = file.Execute(w, Artists)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Internal Server Error 500", http.StatusInternalServerError)
 		return
 	}
 }

@@ -6,18 +6,46 @@
     <title>Groupie Tracker</title>
     <style>
         h1{
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+           font-size : 100px;
+            margin: 70px;
           text-align: center;
         }
+        .center {
+            float: right;
+        }
+        .all {
+            align-items: center;
+        }
+        .name {
+            align-items: center;
+            font-weight: bold;
+            font-size: 20px;
+            text-align: center;
+        }
+        .pic {
+            margin: 30px;
+        }
+    
     </style>
 </head>
 <body>
     <h1>Groupie Tracker</h1>
    <div>
     {{range .}}
-    <p>{{.Name}}</p>
-    <br>
-    <img src="{{.Image}}" alt="{{.Name}}">
-    {{end}}
+    <div class="all">  
+      <div class="center">
+       
+       <a href="/artist.html">
+        <img class="pic" src="{{.Image}}" alt="{{.Name}}">
+       </a>
+       
+        <br>   
+                <p class="name">{{.Name}}</p>
+      </div>  
+    </div>
+   
+    {{end}} 
    </div>
     
 </body>
