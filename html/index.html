@@ -35,13 +35,15 @@
     {{range .}}
     <div class="all">  
       <div class="center">
-       
-       <a href="/artist.html">
+        <!-- <a href="/artist/?id={{.Id}}"> -->
+            <a href="/artist/{{.Id}}">
+
         <img class="pic" src="{{.Image}}" alt="{{.Name}}">
        </a>
        
         <br>   
-                <p class="name">{{.Name}}</p>
+        
+            <p class="name">{{.Name}} {{.Id}}</p>
       </div>  
     </div>
    
