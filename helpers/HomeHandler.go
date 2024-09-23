@@ -16,7 +16,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := FetchData("")
+	err := FetchData("artists", "")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -27,7 +27,6 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "2Internal Server Error 500", http.StatusInternalServerError)
 		return
 	}
-
 	err = file.Execute(w, Artists)
 	if err != nil {
 		http.Error(w, "3Internal Server Error 500", http.StatusInternalServerError)

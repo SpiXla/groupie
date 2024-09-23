@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -24,29 +25,39 @@ func ArtistHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	id := pathParts[2]
+	// rje3 aweld
+	ad, er := strconv.Atoi(id)
+	if er != nil {
+		http.Error(w, "5Internal Server Error 500", http.StatusInternalServerError)
+		return
+	}
 
-	err := FetchData(id)
+err :=FetchData("locations", "/"+id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	// ar, _ := json.Marshal(Artists)
-	var art Artist
-	// ar, _ := json.Marshal(art.ConcertDates)
-	// fmt.Println(string(ar))
-	locations := art.Locations
-	concertdates := art.ConcertDates
-	relations := art.Relations
-	fmt.Println(locations, concertdates, relations)
 
-	
+	// go FetchData("dates", id)
+	// go FetchData("relation", id)
+	var Mok Card
+	Mok.Art = Artists[ad-1]
+	Mok.Locations = Local.Locations
+	Mok.ConcertDates = Date.Dates
+	for d,t := range Rela.DatesLocations {
+		Rela.DatesLocations[d] = t 
+	}
+
+	fmt.Println(Local)
+
 
 	file, err := template.ParseFiles("html/artist.html")
 	if err != nil {
 		http.Error(w, "5Internal Server Error 500", http.StatusInternalServerError)
 		return
 	}
-	err = file.Execute(w, Artists)
+	 
+	err = file.Execute(w, Mok)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

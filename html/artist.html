@@ -17,9 +17,9 @@
             justify-content: center;
             align-items: center;
         }
-        .info {
+        /* .info {
             display: flex;
-        }
+        } */
         .CreationDate {
             margin: 40px;
         }
@@ -34,32 +34,38 @@
 
 <body>
     <div>
-        {{range .}}
+        
         <div>
-            <h1>{{.Name}}</h1>
+            <h1>{{.Art.Name}}</h1>
         </div>
         <div class="image">
-            <img class="pic" src="{{.Image}}" alt="{{.Name}}">
+            <img class="pic" src="{{.Art.Image}}" alt="{{.Art.Name}}">
         </div>
         <div class="info">
             <div class="CreationDate">
-                {{.CreationDate}}
+                {{.Art.CreationDate}}
             </div>
             <div class="FirstAlbum">
-                {{.FirstAlbum}}
+                {{.Art.FirstAlbum}}
             </div>
+            <h2>Locations</h2>
+            {{range .Locations}}
             <div class="Locations">
-                {{.Locations}}
+                {{.}}
+                <br>
             </div>
-            <div class="ConcertDates">
-                {{.ConcertDates}}
+            
+            {{end}}
+            <h2>ConcertDates</h2>
+            {{range .ConcertDates}}
+            <div class="Dates">
+                {{.}}
+                <br>
             </div>
-            <div class="Relations">
-                {{.Relations}}
-            </div>
+            
+            {{end}}
         </div>
         <a href="/"><input type="button" value="Back"/></a>
-        {{end}}
     </div>
 
 </body>

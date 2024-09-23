@@ -7,14 +7,16 @@ import (
 	"net/http"
 )
 
-func FetchData(id string) error {
-	pattern := "artists"
-	link := "https://groupietrackers.herokuapp.com/api"
-
-	if id != "" {
-		pattern += "/" + id
+func FetchData(pattern string, id string) error {
+	link := "http://groupietrackers.herokuapp.com/api/"
+	if pattern != "" {
+		link += pattern
 	}
-	resp, err := http.Get(link + "/" + pattern)
+	if id != "" {
+		link += id
+	}
+
+	resp, err := http.Get(link)
 	if err != nil {
 		return err
 	}
@@ -29,27 +31,32 @@ func FetchData(id string) error {
 		return err
 	}
 
-	// Log the response body for debugging
-	// fmt.Println(string(body))
-
-	// Check if the response is an array or an object
-	if body[0] == '[' {
-		// Unmarshal into a slice of Artist
-		var artists []Artist
-		err = json.Unmarshal(body, &artists)
+	if pattern == "artists" {
+		// var artists Artist
+		err = json.Unmarshal(body, &Artists)
 		if err != nil {
 			return err
 		}
-		Artists = artists // Assign the fetched artists
-	} else {
-		// Unmarshal into a single Artist
-		var artist Artist
-		err = json.Unmarshal(body, &artist)
+	} else if pattern == "locations" {
+		err = json.Unmarshal(body, &Local)
 		if err != nil {
 			return err
 		}
-		Artists = []Artist{artist} 
+	} else if pattern == "dates" {
+		var date []ConcertDate
+		err = json.Unmarshal(body, &date)
+		if err != nil {
+			return err
+		}
+	} else if pattern == "relation" {
+		var relation []Relation
+		err = json.Unmarshal(body, &relation)
+		if err != nil {
+			return err
+		}
 	}
+
+	// fmt.Println(string(body))
 
 	return nil
 }
