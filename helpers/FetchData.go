@@ -30,7 +30,7 @@ func FetchData(id string) error {
 	}
 
 	// Log the response body for debugging
-	fmt.Println("Response Body:", string(body))
+	// fmt.Println(string(body))
 
 	// Check if the response is an array or an object
 	if body[0] == '[' {
@@ -48,7 +48,7 @@ func FetchData(id string) error {
 		if err != nil {
 			return err
 		}
-		Artists = []Artist{artist} // Wrap it in a slice
+		Artists = []Artist{artist} 
 	}
 
 	return nil
