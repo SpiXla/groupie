@@ -15,6 +15,7 @@ func FetchData(pattern string, id string) error {
 	if id != "" {
 		link += id
 	}
+	
 
 	resp, err := http.Get(link)
 	if err != nil {
@@ -31,7 +32,7 @@ func FetchData(pattern string, id string) error {
 		return err
 	}
 
-	if pattern == "artists" {
+	if pattern == "artists" && id == ""{
 		// var artists Artist
 		err = json.Unmarshal(body, &Artists)
 		if err != nil {
@@ -43,14 +44,17 @@ func FetchData(pattern string, id string) error {
 			return err
 		}
 	} else if pattern == "dates" {
-		var date []ConcertDate
-		err = json.Unmarshal(body, &date)
+		err = json.Unmarshal(body, &Date)
 		if err != nil {
 			return err
 		}
 	} else if pattern == "relation" {
-		var relation []Relation
-		err = json.Unmarshal(body, &relation)
+		err = json.Unmarshal(body, &Rela)
+		if err != nil {
+			return err
+		}
+	}else if pattern == "artists" {
+		err = json.Unmarshal(body, &Artists)
 		if err != nil {
 			return err
 		}

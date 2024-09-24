@@ -17,55 +17,70 @@
             justify-content: center;
             align-items: center;
         }
+
         /* .info {
             display: flex;
         } */
         .CreationDate {
             margin: 40px;
         }
+
         .FirstAlbum {
             margin: 40px;
 
         }
-
-
     </style>
 </head>
 
 <body>
     <div>
-        
-        <div>
-            <h1>{{.Art.Name}}</h1>
-        </div>
+
+        {{range .}}
         <div class="image">
-            <img class="pic" src="{{.Art.Image}}" alt="{{.Art.Name}}">
+            <img class="pic" src="{{.Image}}" alt="{{.Name}}">
         </div>
         <div class="info">
             <div class="CreationDate">
-                {{.Art.CreationDate}}
+                <p>{{.CreationDate}}</p>
             </div>
             <div class="FirstAlbum">
-                {{.Art.FirstAlbum}}
+                <p>{{.FirstAlbum}}</p>
             </div>
             <h2>Locations</h2>
             {{range .Locations}}
             <div class="Locations">
-                {{.}}
+                <li>
+                    <ul> {{.}}</ul>
+                </li>
                 <br>
             </div>
-            
             {{end}}
-            <h2>ConcertDates</h2>
+            <h3>ConcertDates</h3>
             {{range .ConcertDates}}
             <div class="Dates">
-                {{.}}
+                <li>
+                    <ul> {{.}}</ul>
+                </li>
                 <br>
             </div>
-            
+
+            {{end}}
+            <h4>Relations</h4>
+            {{range $key, $valeu := .Relations}}
+            <div class="Dates">
+                <span>{{$key}}</span>
+                {{range $valeu}}
+                <li>
+                    <ul>{{.}}</ul>
+                </li>
+                <br>
+            </div>
+            {{end}}
+            {{end}}
+
             {{end}}
         </div>
-        <a href="/"><input type="button" value="Back"/></a>
+        <a href="/"><input type="button" value="Back" /></a>
     </div>
 
 </body>
