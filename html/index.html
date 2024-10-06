@@ -6,19 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Groupie Tracker</title>
     <style>
+        body {
+            background-color: #181C14;
+        }
+
+        .all {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
         h1 {
             font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
             font-size: 100px;
             margin: 70px;
             text-align: center;
+            color: #ECDFCC;
         }
 
         .center {
             float: left;
-        }
+            width: 300px;
+            background-color: #697565;
+            border-radius: 20px;
+            min-height: 370px;
+            color: #ECDFCC;
 
-        .all {
-            align-items: center;
         }
 
         .name {
@@ -30,24 +45,22 @@
 
         .pic {
             margin: 30px;
+            border-radius: 20px;
         }
     </style>
 </head>
 
 <body>
     <h1>Groupie Tracker</h1>
-    <div>
+    <div class="all">
         {{range .}}
-        <div class="all">
+        <a href="/artist/{{.Id}}">
             <div class="center">
-                <a href="/artist/{{.Id}}">
-                    <img class="pic" src="{{.Image}}">
-                </a>
+                <img class="pic" src="{{.Image}}">
                 <br>
                 <p class="name">{{.Name}}</p>
             </div>
-        </div>
-
+        </a>
         {{end}}
     </div>
 

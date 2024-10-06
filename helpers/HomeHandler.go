@@ -16,20 +16,14 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := FetchData("artists", "")
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
 	file, err := template.ParseFiles("html/index.html")
 	if err != nil {
-		http.Error(w, "2Internal Server Error 500", http.StatusInternalServerError)
+		http.Error(w, "Internal Server Error 500", http.StatusInternalServerError)
 		return
 	}
 	err = file.Execute(w, Artists)
 	if err != nil {
-		http.Error(w, "3Internal Server Error 500", http.StatusInternalServerError)
+		http.Error(w, "Internal Server Error 500", http.StatusInternalServerError)
 		return
 	}
 }

@@ -1,82 +1,67 @@
 package helpers
 
 import (
-	"fmt"
 	"html/template"
 	"net/http"
 	"strconv"
 	"strings"
 )
 
+// ArtistHandler handles requests for artist profiles
 func ArtistHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
+	if r.Method != http.MethodGet {
 		http.Error(w, "Method Not Allowed 405", http.StatusMethodNotAllowed)
 		return
 	}
 
 	pathParts := strings.Split(r.URL.Path, "/")
-	if len(pathParts) < 3 || pathParts[2] == "" {
+	if len(pathParts) != 3 || pathParts[2] == "" {
 		http.Error(w, "Not Found 404", http.StatusNotFound)
 		return
 	}
+
 	id := pathParts[2]
-	if r.URL.Path != "/artist/"+id {
+	ad, err := strconv.Atoi(id)
+	if err != nil || ad < 1 || ad > len(Artists) {
 		http.Error(w, "Not Found 404", http.StatusNotFound)
 		return
 	}
 
-	// rje3 aweld
-	ad, er := strconv.Atoi(id)
-	if er != nil {
-		http.Error(w, "5Internal Server Error 500", http.StatusInternalServerError)
+	if err := fetchArtistData(ad); err != nil {
+		http.Error(w, "Internal Server Error 500", http.StatusInternalServerError)
 		return
 	}
-
-	err := FetchData("locations", "/"+id)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	err = FetchData("dates", "/"+id)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	err = FetchData("artists", "/"+id)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	err = FetchData("relation", "/"+id)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	// go FetchData("dates", id)
-	// go FetchData("relation", id)
-
-	Mok.Id = Artists[ad-1].Id
-	Mok.Image = Artists[ad-1].Image
-	Mok.Name = Artists[ad-1].Name
-	Mok.CreationDate = Artists[ad-1].CreationDate
-	Mok.FirstAlbum = Artists[ad-1].FirstAlbum
-	Mok.Locations = Local.Local
-	Mok.ConcertDates = Date.Dates
-	Mok.Relations = Rela.DatesLocations
-	// for d, t := range Rela.DatesLocations {
-	// 	Rela.DatesLocations[d] = t
-	// }
 
 	file, err := template.ParseFiles("html/artist.html")
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Internal Server Error 500", http.StatusInternalServerError)
 		return
 	}
-	fmt.Println(Mok)
-	err = file.Execute(w, Mok)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+
+	if err := file.Execute(w, Cards); err != nil {
+		http.Error(w, "Internal Server Error 500", http.StatusInternalServerError)
 		return
 	}
+}
+
+func fetchArtistData(ad int) error {
+	fetchPatterns := []string{"locations", "dates", "artists", "relation"}
+	for _, pattern := range fetchPatterns {
+		if err := FetchData(pattern, "/"+strconv.Itoa(ad)); err != nil {
+			return err
+		}
+	}
+
+	// Populate Cards with the artist's data
+	Cards.Id = Artists[ad-1].Id
+	Cards.Image = Artists[ad-1].Image
+	Cards.Name = Artists[ad-1].Name
+	Cards.Members = Artists[ad-1].Members
+	Cards.CreationDate = Artists[ad-1].CreationDate
+	Cards.FirstAlbum = Artists[ad-1].FirstAlbum
+	Cards.Locations = Local.Local
+	Cards.ConcertDates = Date.Dates
+	Cards.Relations = Rela.DatesLocations
+
+	return nil
 }

@@ -4,85 +4,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Groupie Tracker</title>
+    <title>{{ .Name }} - Artist Profile</title>
     <style>
-        h1 {
-            text-align: center;
-            font-size: 60px;
-        }
-
-        .image {
+        body {
+            background-color: #181C14;
+            font-family: Arial, sans-serif;
             margin: 20px;
+            color: #ECDFCC;
+        }
+
+        h1 {
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            font-size: 60px;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .artist-image {
+            max-width: 200px;
+            border-radius: 20px;
+            margin: 20px auto;
+            display: block;
+        }
+
+        .card {
+            background-color: #697565;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px; /* Space between cards */
+            flex: 1; /* Allow cards to grow */
+            min-width: 250px; /* Minimum width for cards */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Optional shadow for depth */
+        }
+
+        .card-container {
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-wrap: wrap; /* Allow cards to wrap on smaller screens */
+            justify-content: space-around; /* Space between cards */
+            margin-bottom: 20px; /* Space below the card container */
         }
 
-        /* .info {
-            display: flex;
-        } */
-        .CreationDate {
-            margin: 40px;
+        .location {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #5A6B5B;
+        }
+        .members{
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #5A6B5B;
         }
 
-        .FirstAlbum {
-            margin: 40px;
-
+        ul {
+            list-style-type: none;
+            padding: 0;
         }
+
+        .relations {
+            padding: 10px;
+        }
+
+        .relations ol {
+            padding-left: 20px;
+        }
+
+        a {
+            color: #ECDFCC;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .back-link {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
     </style>
 </head>
 
 <body>
-    <div>
-
-        {{range .}}
-        <div class="image">
-            <img class="pic" src="{{.Image}}" alt="{{.Name}}">
+    <h1>{{ .Name }}</h1>
+    <img src="{{ .Image }}" alt="{{ .Name }}" class="artist-image">
+    
+    <div class="card-container">
+        <div class="card">
+            <p><strong>Creation Date:</strong> {{ .CreationDate }}</p>
+            <p><strong>First Album:</strong> {{ .FirstAlbum }}</p>
         </div>
-        <div class="info">
-            <div class="CreationDate">
-                <p>{{.CreationDate}}</p>
+
+        <div class="card">
+            <h2>Members</h2>
+            {{ range .Members }}
+            <div class="members">
+                {{ . }}
             </div>
-            <div class="FirstAlbum">
-                <p>{{.FirstAlbum}}</p>
-            </div>
+            {{ end }}
+        </div>
+
+        <div class="card relations">
             <h2>Locations</h2>
-            {{range .Locations}}
-            <div class="Locations">
-                <li>
-                    <ul> {{.}}</ul>
-                </li>
-                <br>
+            {{ range .Locations }}
+            <div class="location">
+                {{ . }}
             </div>
-            {{end}}
-            <h3>ConcertDates</h3>
-            {{range .ConcertDates}}
-            <div class="Dates">
-                <li>
-                    <ul> {{.}}</ul>
-                </li>
-                <br>
-            </div>
-
-            {{end}}
-            <h4>Relations</h4>
-            {{range $key, $valeu := .Relations}}
-            <div class="Dates">
-                <span>{{$key}}</span>
-                {{range $valeu}}
-                <li>
-                    <ul>{{.}}</ul>
-                </li>
-                <br>
-            </div>
-            {{end}}
-            {{end}}
-
-            {{end}}
+            {{ end }}
         </div>
-        <a href="/"><input type="button" value="Back" /></a>
+
+        <div class="card relations">
+            <p><strong>Relations:</strong></p>
+            <ul>
+                {{ range $key, $value := .Relations }}
+                <li>{{ $key }}</li>
+                <ul>
+                    {{ range $value }}
+                    <li>{{ . }}</li>
+                    {{ end }}
+                </ul>
+                {{ end }}
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>Concert Dates</h2>
+            <ul>
+                {{ range .ConcertDates }}
+                <li>{{ . }}</li>
+                {{ end }}
+            </ul>
+        </div>
     </div>
 
+    <div class="back-link">
+        <a href="/">
+            <button>
+                Back
+            </button>
+            
+        </a>
+    </div>
 </body>
 
 </html>
